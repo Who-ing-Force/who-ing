@@ -1,2 +1,2 @@
 # who-ing
-Live Chatting Flatform
+Live Chatting Platform
