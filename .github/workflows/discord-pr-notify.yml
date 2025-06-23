@@ -9,11 +9,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Send Discord notification
+      - name: Send Discord Notification
+        if: secrets.DISCORD_WEBHOOK != ''
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
+          PR_TITLE=$(echo "${{ github.event.pull_request.title }}" | jq -R .)
+          PR_URL=$(echo "${{ github.event.pull_request.html_url }}" | jq -R .)
+          PR_ACTOR=$(echo "${{ github.actor }}" | jq -R .)
           curl -H "Content-Type: application/json" \
-            -X POST \
-            -d '{
-              "content": "📢 새 Pull Request가 열렸습니다!\n제목: ${{ github.event.pull_request.title }}\n작성자: ${{ github.actor }}\n링크: ${{ github.event.pull_request.html_url }}"
-            }' \
-            ${{ secrets.DISCORD_WEBHOOK }}
+              -X POST \
+              -d "{\"content\": \"📢 새 Pull Request가 열렸습니다!\\n제목: ${PR_TITLE}\\n작성자: ${PR_ACTOR}\\n링크: ${PR_URL}\"}" \
+              "$DISCORD_WEBHOOK"}
