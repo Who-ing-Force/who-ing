@@ -1,9 +1,11 @@
-import React from 'react';
+import './main.css';
 
 export default function Main() {
     return (
-        <div>
-            main
+        <div className="main-container">
+            <div className="main-content">
+                main
+            </div>
         </div>
     );
 }
